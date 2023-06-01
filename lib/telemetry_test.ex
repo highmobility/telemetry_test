@@ -4,6 +4,23 @@ defmodule TelemetryTest do
   alias TelemetryTest.Server
 
   def telemetry_listen(%{
+        telemetry_listen: {event_name, {mod, fun_name, args}},
+        test: test_name
+      }) do
+    test_ref = make_ref()
+
+    attach_helper(test_name, event_name, fn event, measurements, metadata, config ->
+      args = %{event: event, measurements: measurements, metadata: metadata, config: config}
+      :ok = Server.push(test_ref, args)
+    end)
+
+    on_exit(fn ->
+      {:ok, result} = Server.pop(test_ref)
+      apply(mod, fun_name, [result | args])
+    end)
+  end
+
+  def telemetry_listen(%{
         telemetry_listen: {event_name, telemetry_listen_fn},
         test: test_name
       }) do
