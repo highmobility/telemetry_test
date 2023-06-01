@@ -33,7 +33,7 @@ defmodule TelemetryTestTest do
       assert context.foo == :bar
     end
 
-    @tag telemetry_listen_many: [
+    @tag telemetry_listen: [
            [:sample, :event, :one],
            [:sample, :event, :two],
            [:sample, :event, :one]
@@ -71,7 +71,7 @@ defmodule TelemetryTestTest do
       assert context.foo == :bar
     end
 
-    @tag telemetry_listen_many: [
+    @tag telemetry_listen: [
            {[:sample, :event, :one], &__MODULE__.test_callback_one/1},
            {[:sample, :event, :two], &__MODULE__.test_callback_two/1},
            {[:sample, :event, :one], &__MODULE__.test_callback_one/1}
@@ -88,7 +88,7 @@ defmodule TelemetryTestTest do
       assert context.foo == :bar
     end
 
-    @tag telemetry_listen_many: [
+    @tag telemetry_listen: [
            {[:sample, :event, :one], {__MODULE__, :test_callback_one_mfa, _args = [:other_args]}},
            {[:sample, :event, :two], {__MODULE__, :test_callback_two_mfa, _args = [:other_args]}},
            {[:sample, :event, :one], {__MODULE__, :test_callback_one_mfa, _args = [:other_args]}}

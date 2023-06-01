@@ -13,7 +13,7 @@ defmodule ExampleFourTest do
 
   setup [:telemetry_listen]
 
-  @tag telemetry_listen_many: [
+  @tag telemetry_listen: [
          {[:sample, :event, :example_four, :start], &__MODULE__.test_start_callback/1},
          {[:sample, :event, :example_four, :stop], &__MODULE__.test_stop_callback/1}
        ]

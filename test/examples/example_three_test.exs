@@ -13,7 +13,7 @@ defmodule ExampleThreeTest do
 
   setup [:telemetry_listen]
 
-  @tag telemetry_listen_many: [
+  @tag telemetry_listen: [
          [:sample, :event, :example_three, :start],
          [:sample, :event, :example_three, :stop]
        ]

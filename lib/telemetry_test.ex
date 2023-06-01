@@ -3,24 +3,14 @@ defmodule TelemetryTest do
 
   alias TelemetryTest.Server
 
-  def telemetry_listen(%{
-        telemetry_listen: {event_name, {mod, fun_name, args}},
-        test: test_name
-      }) do
-    test_ref = make_ref()
+  defguard is_event(value) when is_list(value) and is_atom(hd(value))
 
-    attach_helper(test_name, event_name, test_ref, &__MODULE__.push_handler/4)
-
-    on_exit(fn ->
-      {:ok, result} = Server.pop(test_ref)
-      apply(mod, fun_name, [result | args])
-    end)
+  def telemetry_listen(%{telemetry_listen: event, test: test_name}) when is_event(event) do
+    attach_helper(test_name, event, :this_is_a_config, &__MODULE__.send_to_self_handler/4)
   end
 
-  def telemetry_listen(%{
-        telemetry_listen: {event_name, telemetry_listen_fn},
-        test: test_name
-      }) do
+  def telemetry_listen(%{telemetry_listen: {event_name, telemetry_listen_fn}, test: test_name})
+      when is_function(telemetry_listen_fn) do
     test_ref = make_ref()
 
     attach_helper(test_name, event_name, test_ref, &__MODULE__.push_handler/4)
@@ -31,12 +21,18 @@ defmodule TelemetryTest do
     end)
   end
 
-  def telemetry_listen(%{telemetry_listen: event_name, test: test_name})
-      when is_list(event_name) do
-    attach_helper(test_name, event_name, :this_is_a_config, &__MODULE__.send_to_self_handler/4)
+  def telemetry_listen(%{telemetry_listen: {event_name, {mod, fun_name, args}}, test: test_name}) do
+    test_ref = make_ref()
+
+    attach_helper(test_name, event_name, test_ref, &__MODULE__.push_handler/4)
+
+    on_exit(fn ->
+      {:ok, result} = Server.pop(test_ref)
+      apply(mod, fun_name, [result | args])
+    end)
   end
 
-  def telemetry_listen(%{telemetry_listen_many: matchers} = context) do
+  def telemetry_listen(%{telemetry_listen: matchers} = context) do
     for matcher <- matchers do
       new_context = Map.put(context, :telemetry_listen, matcher)
       telemetry_listen(new_context)
