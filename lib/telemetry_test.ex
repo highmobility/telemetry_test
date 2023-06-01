@@ -43,16 +43,6 @@ defmodule TelemetryTest do
 
   def telemetry_listen(context), do: context
 
-  def push_handler(event, measurements, metadata, test_ref) do
-    args = %{event: event, measurements: measurements, metadata: metadata}
-    :ok = Server.push(test_ref, args)
-  end
-
-  def send_to_self_handler(event, measurements, metadata, _config) do
-    args = %{event: event, measurements: measurements, metadata: metadata}
-    send(self(), {:telemetry_event, args})
-  end
-
   defp attach_helper(test_name, event_name, config, callback_fn) do
     handler_name = "#{test_name}-#{:rand.uniform()}-handler"
 
@@ -61,5 +51,17 @@ defmodule TelemetryTest do
     on_exit(fn ->
       :ok = :telemetry.detach(handler_name)
     end)
+  end
+
+  # This function is only public to avoid a warning about optimization
+  def push_handler(event, measurements, metadata, test_ref) do
+    args = %{event: event, measurements: measurements, metadata: metadata}
+    :ok = Server.push(test_ref, args)
+  end
+
+  # This function is only public to avoid a warning about optimization
+  def send_to_self_handler(event, measurements, metadata, _config) do
+    args = %{event: event, measurements: measurements, metadata: metadata}
+    send(self(), {:telemetry_event, args})
   end
 end
