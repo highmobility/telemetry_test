@@ -23,29 +23,19 @@ defmodule ExampleFiveTest do
     assert :there = ExampleFive.hello()
   end
 
-  def test_start_callback(
-        %{
-          event: event,
-          measurements: measurements,
-          metadata: metadata
-        },
-        :other_args
-      ) do
-    assert event == [:sample, :event, :example_five, :start]
-    assert %{monotonic_time: _, system_time: _} = measurements
-    assert %{sample_metadata: true, telemetry_span_context: _} = metadata
+  def test_start_callback(telemetry, :other_args) do
+    assert %{
+             event: [:sample, :event, :example_five, :start],
+             measurements: %{monotonic_time: _, system_time: _},
+             metadata: %{sample_metadata: true, telemetry_span_context: _}
+           } = telemetry
   end
 
-  def test_stop_callback(
-        %{
-          event: event,
-          measurements: measurements,
-          metadata: metadata
-        },
-        :other_args
-      ) do
-    assert event == [:sample, :event, :example_five, :stop]
-    assert %{monotonic_time: _, duration: _} = measurements
-    assert %{more_metadata: true, telemetry_span_context: _} = metadata
+  def test_stop_callback(telemetry, :other_args) do
+    assert %{
+             event: [:sample, :event, :example_five, :stop],
+             measurements: %{monotonic_time: _, duration: _},
+             metadata: %{more_metadata: true, telemetry_span_context: _}
+           } = telemetry
   end
 end

@@ -106,21 +106,27 @@ defmodule TelemetryTestTest do
     end
 
     def test_callback(telemetry) do
-      assert telemetry.event == [:sample, :event]
-      assert telemetry.measurements == %{sample_measurement: true}
-      assert telemetry.metadata == %{sample_metadata: true}
+      assert %{
+               event: [:sample, :event],
+               measurements: %{sample_measurement: true},
+               metadata: %{sample_metadata: true}
+             } = telemetry
     end
 
     def test_callback_one(telemetry) do
-      assert telemetry.event == [:sample, :event, :one]
-      assert telemetry.measurements == %{sample_measurement: true, n: 1}
-      assert telemetry.metadata == %{sample_metadata: true}
+      assert %{
+               event: [:sample, :event, :one],
+               measurements: %{sample_measurement: true, n: 1},
+               metadata: %{sample_metadata: true}
+             } = telemetry
     end
 
     def test_callback_two(telemetry) do
-      assert telemetry.event == [:sample, :event, :two]
-      assert telemetry.measurements == %{sample_measurement: true, n: 2}
-      assert telemetry.metadata == %{sample_metadata: true}
+      assert %{
+               event: [:sample, :event, :two],
+               measurements: %{sample_measurement: true, n: 2},
+               metadata: %{sample_metadata: true}
+             } = telemetry
     end
 
     def test_callback_one_mfa(telemetry, :other_args) do

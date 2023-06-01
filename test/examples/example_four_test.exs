@@ -21,23 +21,19 @@ defmodule ExampleFourTest do
     assert :there = ExampleFour.hello()
   end
 
-  def test_start_callback(%{
-        event: event,
-        measurements: measurements,
-        metadata: metadata
-      }) do
-    assert event == [:sample, :event, :example_four, :start]
-    assert %{monotonic_time: _, system_time: _} = measurements
-    assert %{sample_metadata: true, telemetry_span_context: _} = metadata
+  def test_start_callback(telemetry) do
+    assert %{
+             event: [:sample, :event, :example_four, :start],
+             measurements: %{monotonic_time: _, system_time: _},
+             metadata: %{sample_metadata: true, telemetry_span_context: _}
+           } = telemetry
   end
 
-  def test_stop_callback(%{
-        event: event,
-        measurements: measurements,
-        metadata: metadata
-      }) do
-    assert event == [:sample, :event, :example_four, :stop]
-    assert %{monotonic_time: _, duration: _} = measurements
-    assert %{more_metadata: true, telemetry_span_context: _} = metadata
+  def test_stop_callback(telemetry) do
+    assert %{
+             event: [:sample, :event, :example_four, :stop],
+             measurements: %{monotonic_time: _, duration: _},
+             metadata: %{more_metadata: true, telemetry_span_context: _}
+           } = telemetry
   end
 end

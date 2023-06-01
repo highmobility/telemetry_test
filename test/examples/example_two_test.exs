@@ -20,13 +20,11 @@ defmodule ExampleTwoTest do
     assert :there = ExampleTwo.hello()
   end
 
-  def test_callback(%{
-        event: event,
-        measurements: measurements,
-        metadata: metadata
-      }) do
-    assert event == [:sample, :event, :example_two]
-    assert measurements == %{sample_value: :hello_there}
-    assert metadata == %{sample_metadata: true}
+  def test_callback(telemetry) do
+    assert %{
+             event: [:sample, :event, :example_two],
+             measurements: %{sample_value: :hello_there},
+             metadata: %{sample_metadata: true}
+           } = telemetry
   end
 end
