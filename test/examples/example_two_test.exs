@@ -23,10 +23,8 @@ defmodule ExampleTwoTest do
   def test_callback(%{
         event: event,
         measurements: measurements,
-        metadata: metadata,
-        config: config
+        metadata: metadata
       }) do
-    assert config == :this_is_a_config
     assert event == [:sample, :event, :example_two]
     assert measurements == %{sample_value: :hello_there}
     assert metadata == %{sample_metadata: true}

@@ -27,12 +27,10 @@ defmodule ExampleFiveTest do
         %{
           event: event,
           measurements: measurements,
-          metadata: metadata,
-          config: config
+          metadata: metadata
         },
         :other_args
       ) do
-    assert config == :this_is_a_config
     assert event == [:sample, :event, :example_five, :start]
     assert %{monotonic_time: _, system_time: _} = measurements
     assert %{sample_metadata: true, telemetry_span_context: _} = metadata
@@ -42,12 +40,10 @@ defmodule ExampleFiveTest do
         %{
           event: event,
           measurements: measurements,
-          metadata: metadata,
-          config: config
+          metadata: metadata
         },
         :other_args
       ) do
-    assert config == :this_is_a_config
     assert event == [:sample, :event, :example_five, :stop]
     assert %{monotonic_time: _, duration: _} = measurements
     assert %{more_metadata: true, telemetry_span_context: _} = metadata

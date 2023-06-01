@@ -22,7 +22,6 @@ defmodule ExampleThreeTest do
 
     assert_receive {:telemetry_event,
                     %{
-                      config: :this_is_a_config,
                       event: [:sample, :event, :example_three, :start],
                       measurements: %{monotonic_time: _, system_time: _},
                       metadata: %{sample_metadata: true}
@@ -30,7 +29,6 @@ defmodule ExampleThreeTest do
 
     assert_receive {:telemetry_event,
                     %{
-                      config: :this_is_a_config,
                       event: [:sample, :event, :example_three, :stop],
                       measurements: %{monotonic_time: _, duration: _},
                       metadata: %{more_metadata: true}

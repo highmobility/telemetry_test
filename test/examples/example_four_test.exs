@@ -24,10 +24,8 @@ defmodule ExampleFourTest do
   def test_start_callback(%{
         event: event,
         measurements: measurements,
-        metadata: metadata,
-        config: config
+        metadata: metadata
       }) do
-    assert config == :this_is_a_config
     assert event == [:sample, :event, :example_four, :start]
     assert %{monotonic_time: _, system_time: _} = measurements
     assert %{sample_metadata: true, telemetry_span_context: _} = metadata
@@ -36,10 +34,8 @@ defmodule ExampleFourTest do
   def test_stop_callback(%{
         event: event,
         measurements: measurements,
-        metadata: metadata,
-        config: config
+        metadata: metadata
       }) do
-    assert config == :this_is_a_config
     assert event == [:sample, :event, :example_four, :stop]
     assert %{monotonic_time: _, duration: _} = measurements
     assert %{more_metadata: true, telemetry_span_context: _} = metadata

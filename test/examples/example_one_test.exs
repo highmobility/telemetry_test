@@ -21,7 +21,6 @@ defmodule ExampleOneTest do
 
     assert_receive {:telemetry_event,
                     %{
-                      config: :this_is_a_config,
                       event: [:sample, :event, :example_one],
                       measurements: %{sample_value: :hello_there},
                       metadata: %{sample_metadata: true}

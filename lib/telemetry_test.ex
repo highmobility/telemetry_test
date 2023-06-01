@@ -9,10 +9,7 @@ defmodule TelemetryTest do
       }) do
     test_ref = make_ref()
 
-    attach_helper(test_name, event_name, fn event, measurements, metadata, config ->
-      args = %{event: event, measurements: measurements, metadata: metadata, config: config}
-      :ok = Server.push(test_ref, args)
-    end)
+    attach_helper(test_name, event_name, test_ref, &__MODULE__.push_handler/4)
 
     on_exit(fn ->
       {:ok, result} = Server.pop(test_ref)
@@ -26,10 +23,7 @@ defmodule TelemetryTest do
       }) do
     test_ref = make_ref()
 
-    attach_helper(test_name, event_name, fn event, measurements, metadata, config ->
-      args = %{event: event, measurements: measurements, metadata: metadata, config: config}
-      :ok = Server.push(test_ref, args)
-    end)
+    attach_helper(test_name, event_name, test_ref, &__MODULE__.push_handler/4)
 
     on_exit(fn ->
       {:ok, result} = Server.pop(test_ref)
@@ -39,10 +33,7 @@ defmodule TelemetryTest do
 
   def telemetry_listen(%{telemetry_listen: event_name, test: test_name})
       when is_list(event_name) do
-    attach_helper(test_name, event_name, fn event, measurements, metadata, config ->
-      args = %{event: event, measurements: measurements, metadata: metadata, config: config}
-      send(self(), {:telemetry_event, args})
-    end)
+    attach_helper(test_name, event_name, :this_is_a_config, &__MODULE__.send_to_self_handler/4)
   end
 
   def telemetry_listen(%{telemetry_listen_many: matchers} = context) do
@@ -56,10 +47,20 @@ defmodule TelemetryTest do
 
   def telemetry_listen(context), do: context
 
-  defp attach_helper(test_name, event_name, callback_fn) do
+  def push_handler(event, measurements, metadata, test_ref) do
+    args = %{event: event, measurements: measurements, metadata: metadata}
+    :ok = Server.push(test_ref, args)
+  end
+
+  def send_to_self_handler(event, measurements, metadata, _config) do
+    args = %{event: event, measurements: measurements, metadata: metadata}
+    send(self(), {:telemetry_event, args})
+  end
+
+  defp attach_helper(test_name, event_name, config, callback_fn) do
     handler_name = "#{test_name}-#{:rand.uniform()}-handler"
 
-    :ok = :telemetry.attach(handler_name, event_name, callback_fn, :this_is_a_config)
+    :ok = :telemetry.attach(handler_name, event_name, callback_fn, config)
 
     on_exit(fn ->
       :ok = :telemetry.detach(handler_name)
