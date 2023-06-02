@@ -1,4 +1,10 @@
 defmodule TelemetryTest do
+  @moduledoc """
+  Telemetry Test Helper
+
+  For example usage please refer to test/examples directory
+  """
+
   use ExUnit.Case
 
   alias TelemetryTest.Server
