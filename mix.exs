@@ -26,7 +26,6 @@ defmodule TelemetryTest.MixProject do
 
   defp package do
     %{
-      organization: "highmobility",
       licenses: ["Apache-2.0"],
       links: %{"GitHub" => "https://github.com/highmobility/telemetry_test"}
     }
