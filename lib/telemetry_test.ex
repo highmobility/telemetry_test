@@ -12,14 +12,14 @@ defmodule TelemetryTest do
   defguardp is_event(value) when is_list(value) and is_atom(hd(value))
 
   def telemetry_listen(%{telemetry_listen: event, test: test_name}) when is_event(event) do
-    attach_helper(test_name, event, :this_is_a_config, &__MODULE__.send_to_self_handler/4)
+    attach_helper(test_name, event, :this_is_a_config, &__MODULE__.__send_to_self_handler__/4)
   end
 
   def telemetry_listen(%{telemetry_listen: {event_name, telemetry_listen_fn}, test: test_name})
       when is_function(telemetry_listen_fn) do
     test_ref = make_ref()
 
-    attach_helper(test_name, event_name, test_ref, &__MODULE__.push_handler/4)
+    attach_helper(test_name, event_name, test_ref, &__MODULE__.__push_handler__/4)
 
     on_exit(fn ->
       {:ok, result} = Server.pop(test_ref)
@@ -30,7 +30,7 @@ defmodule TelemetryTest do
   def telemetry_listen(%{telemetry_listen: {event_name, {mod, fun_name, args}}, test: test_name}) do
     test_ref = make_ref()
 
-    attach_helper(test_name, event_name, test_ref, &__MODULE__.push_handler/4)
+    attach_helper(test_name, event_name, test_ref, &__MODULE__.__push_handler__/4)
 
     on_exit(fn ->
       {:ok, result} = Server.pop(test_ref)
@@ -60,13 +60,13 @@ defmodule TelemetryTest do
   end
 
   # This function is only public to avoid a warning about optimization
-  def push_handler(event, measurements, metadata, test_ref) do
+  def __push_handler__(event, measurements, metadata, test_ref) do
     args = %{event: event, measurements: measurements, metadata: metadata}
     :ok = Server.push(test_ref, args)
   end
 
   # This function is only public to avoid a warning about optimization
-  def send_to_self_handler(event, measurements, metadata, _config) do
+  def __send_to_self_handler__(event, measurements, metadata, _config) do
     args = %{event: event, measurements: measurements, metadata: metadata}
     send(self(), {:telemetry_event, args})
   end
