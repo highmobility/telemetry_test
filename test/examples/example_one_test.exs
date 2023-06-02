@@ -8,6 +8,7 @@ defmodule ExampleOne do
   end
 end
 
+# --- TEST_BEGIN
 defmodule ExampleOneTest do
   use ExUnit.Case, async: false
 

@@ -1,6 +1,29 @@
 defmodule TelemetryTest do
+  doc_example = fn title, filename ->
+    [_code_example, test_example] =
+      "test/examples/#{filename}"
+      |> File.read!()
+      |> String.split("\n# --- TEST_BEGIN\n")
+
+    """
+    ### #{title}
+
+    ```elixir
+    #{test_example}
+    ```
+    """
+  end
+
   @moduledoc """
   For example usage please refer to [test/examples](https://github.com/highmobility/telemetry_test/tree/main/test/examples) directory
+
+  ## Examples
+
+  #{doc_example.("Telemetry event sent to test process", "example_one_test.exs")}
+  #{doc_example.("Telemetry event being passed to callback after test", "example_two_test.exs")}
+  #{doc_example.("Multiple telemetry events sent to test process", "example_three_test.exs")}
+  #{doc_example.("Multiple telemetry events being passed to callback after test", "example_four_test.exs")}
+  #{doc_example.("Multiple telemetry events being passed to callback using MFA", "example_four_test.exs")}
   """
 
   use ExUnit.Case

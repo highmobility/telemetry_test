@@ -6,6 +6,7 @@ defmodule ExampleFour do
   end
 end
 
+# --- TEST_BEGIN
 defmodule ExampleFourTest do
   use ExUnit.Case, async: false
 
