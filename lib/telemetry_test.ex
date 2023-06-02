@@ -9,7 +9,7 @@ defmodule TelemetryTest do
 
   alias TelemetryTest.Server
 
-  defguard is_event(value) when is_list(value) and is_atom(hd(value))
+  defguardp is_event(value) when is_list(value) and is_atom(hd(value))
 
   def telemetry_listen(%{telemetry_listen: event, test: test_name}) when is_event(event) do
     attach_helper(test_name, event, :this_is_a_config, &__MODULE__.send_to_self_handler/4)
