@@ -7,7 +7,9 @@ defmodule TelemetryTest.MixProject do
       version: "0.1.0",
       elixir: "~> 1.14",
       start_permanent: Mix.env() == :prod,
-      deps: deps()
+      deps: deps(),
+      description: description(),
+      package: package()
     ]
   end
 
@@ -16,6 +18,18 @@ defmodule TelemetryTest.MixProject do
       extra_applications: [:logger],
       mod: {TelemetryTest.Application, []}
     ]
+  end
+
+  defp description do
+    "Simplify and reduce test clutter when testing Telemetry events"
+  end
+
+  defp package do
+    %{
+      organization: "highmobility",
+      licenses: ["Apache-2.0"],
+      links: %{"GitHub" => "https://github.com/highmobility/telemetry_test"}
+    }
   end
 
   defp deps do
