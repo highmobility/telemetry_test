@@ -59,7 +59,7 @@ defmodule MyTestModule do
 
   @tag telemetry_listen: [:sample, :event, :example_one]
   test "match on telemetry event" do
-    # Execute the code that will emits the telemetry event
+    # Execute the code that will emit the telemetry event
     assert :there = ExampleOne.hello()
 
     # your test process will receive a message with Telemetry event
