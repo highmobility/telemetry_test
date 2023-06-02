@@ -9,7 +9,8 @@ defmodule TelemetryTest.MixProject do
       start_permanent: Mix.env() == :prod,
       deps: deps(),
       description: description(),
-      package: package()
+      package: package(),
+      docs: docs()
     ]
   end
 
@@ -31,9 +32,17 @@ defmodule TelemetryTest.MixProject do
     }
   end
 
+  defp docs do
+    [
+      main: "readme",
+      extras: ["README.md"]
+    ]
+  end
+
   defp deps do
     [
       {:telemetry, "~> 1.2"},
+      {:ex_doc, "~> 0.29.4", only: :dev, runtime: false},
       {:credo, "~> 1.7", only: [:dev, :test]}
     ]
   end

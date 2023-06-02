@@ -1,8 +1,6 @@
 defmodule TelemetryTest do
   @moduledoc """
-  Telemetry Test Helper
-
-  For example usage please refer to test/examples directory
+  For example usage please refer to [test/examples](https://github.com/highmobility/telemetry_test/tree/main/test/examples) directory
   """
 
   use ExUnit.Case
@@ -11,6 +9,10 @@ defmodule TelemetryTest do
 
   defguardp is_event(value) when is_list(value) and is_atom(hd(value))
 
+  @doc """
+  ExUnit setup callback function which attaches to telemetry events
+  """
+  @doc since: "0.1.0"
   def telemetry_listen(%{telemetry_listen: event, test: test_name}) when is_event(event) do
     attach_helper(test_name, event, :this_is_a_config, &__MODULE__.__send_to_self_handler__/4)
   end
@@ -59,12 +61,14 @@ defmodule TelemetryTest do
     end)
   end
 
+  @doc false
   # This function is only public to avoid a warning about optimization
   def __push_handler__(event, measurements, metadata, test_ref) do
     args = %{event: event, measurements: measurements, metadata: metadata}
     :ok = Server.push(test_ref, args)
   end
 
+  @doc false
   # This function is only public to avoid a warning about optimization
   def __send_to_self_handler__(event, measurements, metadata, _config) do
     args = %{event: event, measurements: measurements, metadata: metadata}
