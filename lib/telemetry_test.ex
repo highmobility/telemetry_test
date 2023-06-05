@@ -37,7 +37,7 @@ defmodule TelemetryTest do
   """
   @doc since: "0.1.0"
   def telemetry_listen(%{telemetry_listen: event, test: test_name}) when is_event(event) do
-    attach_helper(test_name, event, :this_is_a_config, &__MODULE__.__send_to_self_handler__/4)
+    attach_helper(test_name, event, self(), &__MODULE__.__send_to_self_handler__/4)
   end
 
   def telemetry_listen(%{telemetry_listen: {event_name, telemetry_listen_fn}, test: test_name})
@@ -93,8 +93,8 @@ defmodule TelemetryTest do
 
   @doc false
   # This function is only public to avoid a warning about optimization
-  def __send_to_self_handler__(event, measurements, metadata, _config) do
+  def __send_to_self_handler__(event, measurements, metadata, config_test_pid) do
     args = %{event: event, measurements: measurements, metadata: metadata}
-    send(self(), {:telemetry_event, args})
+    send(config_test_pid, {:telemetry_event, args})
   end
 end

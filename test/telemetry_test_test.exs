@@ -26,6 +26,25 @@ defmodule TelemetryTestTest do
       assert context.foo == :bar
     end
 
+    @tag telemetry_listen: [:sample, :event]
+    test "sends telemetry event to test process even when code runs outside test process",
+         context do
+      spawn(fn ->
+        :telemetry.execute([:sample, :event], %{sample_measurement: true}, %{
+          sample_metadata: true
+        })
+      end)
+
+      assert_receive {:telemetry_event,
+                      %{
+                        event: [:sample, :event],
+                        measurements: %{sample_measurement: true},
+                        metadata: %{sample_metadata: true}
+                      }}
+
+      assert context.foo == :bar
+    end
+
     @tag telemetry_listen: {[:sample, :event], &__MODULE__.test_callback/1}
     test "executes given function after test run", context do
       :telemetry.execute([:sample, :event], %{sample_measurement: true}, %{sample_metadata: true})
