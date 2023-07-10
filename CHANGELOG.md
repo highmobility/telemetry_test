@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.1.2] - 2023-07-10
+### Docs
+- Import correct module on readme file
+
 ## [0.1.1] - 2023-06-05
 ### Fixed
 - Fix telemetry event being sent to telemetry emitter process instead of test process(#1).
