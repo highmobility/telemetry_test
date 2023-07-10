@@ -44,7 +44,7 @@ end
 ```elixir
 defmodule MyTestModule do
   use ExUnit.Case, async: false
-  import TelemetryTestHelper
+  import TelemetryTest
 end
 ```
 
