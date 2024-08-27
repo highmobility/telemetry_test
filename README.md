@@ -30,7 +30,7 @@ To start using the Telemetry Test Helper in your Elixir project, follow these st
 ```elixir
 defp deps do
   [
-    {:telemetry_test, "~> 1.0"}
+    {:telemetry_test, "~> 0.1.0"}
   ]
 end
 ```
