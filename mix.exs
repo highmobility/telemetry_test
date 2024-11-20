@@ -42,7 +42,7 @@ defmodule TelemetryTest.MixProject do
   defp deps do
     [
       {:telemetry, "~> 1.2"},
-      {:ex_doc, "~> 0.34.0", only: :dev, runtime: false},
+      {:ex_doc, "~> 0.35.0", only: :dev, runtime: false},
       {:credo, "~> 1.7", only: [:dev, :test]}
     ]
   end
